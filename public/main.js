@@ -19,6 +19,7 @@ let currentFilter = 'all';
 
 // Initialize
 function init() {
+  alert('Borrachos.docx initializing...');
   console.log('Borrachos.docx initializing...');
   
   // Initialize GitHub client and user manager
@@ -185,12 +186,19 @@ function setupEventListeners() {
   
   // Login form submit
   if (loginForm) {
+    console.log('Setting up login form handler');
     loginForm.addEventListener('submit', async (e) => {
+      alert('Login form submitted!');
+      console.log('Login form submitted!');
       e.preventDefault();
+      e.stopPropagation();
       const username = document.getElementById('loginUsername').value;
       const password = document.getElementById('loginPassword').value;
       
+      console.log('Attempting login for:', username);
+      
       const result = await userManager.login(username, password);
+      console.log('Login result:', result);
       if (result.success) {
         currentUser = result.username;
         localStorage.setItem('nose_current_user', username);
