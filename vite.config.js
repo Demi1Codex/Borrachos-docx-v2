@@ -8,7 +8,11 @@ export default defineConfig({
             input: {
                 main: 'index.html',
                 privacy: 'privacy.html'
+            },
+            output: {
+                manualChunks: undefined
             }
         }
     },
+    assetsInclude: ['**/*.js']
 });
