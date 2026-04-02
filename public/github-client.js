@@ -1,8 +1,8 @@
 // GitHub Backend Client for NOSE App
+// Token: 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
 // Repo: Demi1Codex/Borachos-datax
-// IMPORTANTE: Reemplaza 'TU_TOKEN_AQUI' con tu token de GitHub antes de usar
 
-const GITHUB_TOKEN = 'TU_TOKEN_AQUI';
+const GITHUB_TOKEN = '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';
 const REPO_OWNER = 'Demi1Codex';
 const REPO_NAME = 'Borachos-datax';
 const BASE_URL = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents`;

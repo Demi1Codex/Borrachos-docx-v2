@@ -19,31 +19,24 @@ let currentFilter = 'all';
 
 // Initialize
 function init() {
-  alert('Borrachos.docx initializing...');
   console.log('Borrachos.docx initializing...');
   
   // Initialize GitHub client and user manager
   githubClient = new GitHubBackendClient();
   userManager = new UserManager(githubClient);
   
-  console.log('Testing GitHub connection...');
-  
   // Check for stored user and try to login using cross-platform storage
   userManager.getCurrentUser().then(storedUser => {
-    console.log('Stored user found:', storedUser);
     if (storedUser) {
       // Try auto-login
       userManager.autoLogin().then(loggedInUser => {
-        console.log('Auto-login result:', loggedInUser);
         if (loggedInUser) {
           currentUser = loggedInUser;
           githubClient.getUserIdeas(currentUser).then(userData => {
             ideas = userData.ideas || [];
-            console.log('Ideas loaded:', ideas.length);
             showApp();
             finishInit();
-          }).catch((err) => {
-            console.error('Error getting user ideas:', err);
+          }).catch(() => {
             showLogin();
             finishInit();
           });
@@ -51,8 +44,7 @@ function init() {
           showLogin();
           finishInit();
         }
-      }).catch((err) => {
-        console.error('Auto-login error:', err);
+      }).catch(() => {
         showLogin();
         finishInit();
       });
@@ -60,8 +52,7 @@ function init() {
       showLogin();
       finishInit();
     }
-  }).catch((err) => {
-    console.error('getCurrentUser error:', err);
+  }).catch(() => {
     showLogin();
     finishInit();
   });
@@ -186,19 +177,12 @@ function setupEventListeners() {
   
   // Login form submit
   if (loginForm) {
-    console.log('Setting up login form handler');
     loginForm.addEventListener('submit', async (e) => {
-      alert('Login form submitted!');
-      console.log('Login form submitted!');
       e.preventDefault();
-      e.stopPropagation();
       const username = document.getElementById('loginUsername').value;
       const password = document.getElementById('loginPassword').value;
       
-      console.log('Attempting login for:', username);
-      
       const result = await userManager.login(username, password);
-      console.log('Login result:', result);
       if (result.success) {
         currentUser = result.username;
         localStorage.setItem('nose_current_user', username);
