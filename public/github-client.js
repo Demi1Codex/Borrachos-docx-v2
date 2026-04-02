@@ -7,6 +7,62 @@ const REPO_OWNER = 'Demi1Codex';
 const REPO_NAME = 'Borachos-datax';
 const BASE_URL = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents`;
 
+// Storage helper using Capacitor Preferences for Android
+const Storage = {
+  _isNative: null,
+  
+  async isNative() {
+    if (this._isNative === null) {
+      try {
+        this._isNative = window.Capacitor && window.Capacitor.isNativePlatform ? await window.Capacitor.isNativePlatform() : false;
+      } catch {
+        this._isNative = false;
+      }
+    }
+    return this._isNative;
+  },
+  
+  async saveCredentials(username, password) {
+    try {
+      if (await this.isNative() && window.Capacitor.Plugins.Preferences) {
+        await window.Capacitor.Plugins.Preferences.set({ key: 'nose_current_user', value: username });
+        await window.Capacitor.Plugins.Preferences.set({ key: 'nose_user_password', value: password });
+      }
+    } catch {}
+    // Always also save to localStorage for web
+    localStorage.setItem('nose_current_user', username);
+    localStorage.setItem('nose_user_password', password);
+  },
+  
+  async getCredentials() {
+    if (await this.isNative()) {
+      try {
+        const user = await window.Capacitor.Plugins.Preferences.get({ key: 'nose_current_user' });
+        const pass = await window.Capacitor.Plugins.Preferences.get({ key: 'nose_user_password' });
+        if (user.value && pass.value) {
+          return { username: user.value, password: pass.value };
+        }
+      } catch {}
+    }
+    // Fallback to localStorage
+    return {
+      username: localStorage.getItem('nose_current_user'),
+      password: localStorage.getItem('nose_user_password')
+    };
+  },
+  
+  async clearCredentials() {
+    try {
+      if (await this.isNative() && window.Capacitor.Plugins.Preferences) {
+        await window.Capacitor.Plugins.Preferences.remove({ key: 'nose_current_user' });
+        await window.Capacitor.Plugins.Preferences.remove({ key: 'nose_user_password' });
+      }
+    } catch {}
+    localStorage.removeItem('nose_current_user');
+    localStorage.removeItem('nose_user_password');
+  }
+};
+
 class GitHubBackendClient {
   constructor(token = GITHUB_TOKEN) {
     this.token = token;

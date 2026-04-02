@@ -62,8 +62,8 @@ class UserManager {
     
     await this.github.saveUserIdeas(finalName, { ideas: [] });
 
-    localStorage.setItem('nose_current_user', finalName);
-    localStorage.setItem('nose_user_password', password);
+    // Use cross-platform storage
+    await Storage.saveCredentials(finalName, password);
     this.currentUser = finalName;
 
     return { success: true, username: finalName };
@@ -88,34 +88,34 @@ class UserManager {
       return { success: false, error: 'Contraseña incorrecta' };
     }
 
-    localStorage.setItem('nose_current_user', user.username);
-    localStorage.setItem('nose_user_password', password);
+    // Use cross-platform storage
+    await Storage.saveCredentials(user.username, password);
     this.currentUser = user.username;
 
     return { success: true, username: user.username };
   }
 
-  logout() {
-    localStorage.removeItem('nose_current_user');
-    localStorage.removeItem('nose_user_password');
+  async logout() {
+    await Storage.clearCredentials();
     this.currentUser = null;
   }
 
-  getCurrentUser() {
-    const stored = localStorage.getItem('nose_current_user');
-    if (stored) {
-      this.currentUser = stored;
+  async getCurrentUser() {
+    const creds = await Storage.getCredentials();
+    if (creds.username) {
+      this.currentUser = creds.username;
     }
     return this.currentUser;
   }
 
-  getStoredPassword() {
-    return localStorage.getItem('nose_user_password');
+  async getStoredPassword() {
+    const creds = await Storage.getCredentials();
+    return creds.password;
   }
 
   async autoLogin() {
-    const username = this.getCurrentUser();
-    const password = this.getStoredPassword();
+    const username = await this.getCurrentUser();
+    const password = await this.getStoredPassword();
     
     if (username && password) {
       const result = await this.login(username, password);
