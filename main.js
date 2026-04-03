@@ -37,7 +37,9 @@ function init() {
             showApp();
             finishInit();
           }).catch(() => {
-            showLogin();
+            // User exists but has no ideas yet - this is OK for first login
+            ideas = [];
+            showApp();
             finishInit();
           });
         } else {
