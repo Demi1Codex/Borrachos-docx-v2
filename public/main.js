@@ -77,16 +77,30 @@ function finishInit() {
       syncIdeas();
     }
   });
+  
+  setInterval(() => {
+    if (currentUser && !document.hidden) {
+      syncIdeas();
+    }
+  }, 10000);
+  
+  if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App) {
+    window.Capacitor.Plugins.App.addListener('resume', () => {
+      if (currentUser) {
+        syncIdeas();
+      }
+    });
+  }
 }
 
 async function syncIdeas() {
   if (!currentUser || !githubClient) return;
   try {
     const userData = await githubClient.getUserIdeas(currentUser);
-    if (userData && userData.ideas) {
+    if (userData && userData.ideas && userData.ideas.length > 0) {
       ideas = userData.ideas;
+      localStorage.setItem('borrachos-ideas', JSON.stringify(ideas));
       renderIdeas();
-      showNotification('📥 Ideas sincronizadas');
     }
   } catch (err) {
     console.log('Sync error:', err.message);
