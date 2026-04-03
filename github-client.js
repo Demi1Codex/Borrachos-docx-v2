@@ -12,14 +12,11 @@ const CORS_PROXY = 'https://corsproxy.io/?';
 let GITHUB_TOKEN = null;
 
 async function fetchTokenFromPastebin(url) {
-  console.log('[GitHub] Fetching token from pastebin...');
   const proxyUrl = CORS_PROXY + encodeURIComponent(url);
   try {
     const response = await fetch(proxyUrl);
-    console.log('[GitHub] Pastebin response status:', response.status);
     if (response.ok) {
       const token = await response.text();
-      console.log('[GitHub] Token fetched, length:', token.length);
       const trimmed = token.trim();
       if (trimmed.startsWith('ghp_') && trimmed.length > 20) {
         return trimmed;
@@ -32,10 +29,7 @@ async function fetchTokenFromPastebin(url) {
 }
 
 async function getGitHubToken() {
-  if (GITHUB_TOKEN) {
-    console.log('[GitHub] Returning cached token');
-    return GITHUB_TOKEN;
-  }
+  if (GITHUB_TOKEN) return GITHUB_TOKEN;
   
   // Intentar obtener del Storage primero
   if (window.Capacitor && window.Capacitor.isNativePlatform) {
@@ -43,24 +37,19 @@ async function getGitHubToken() {
       const { Preferences } = window.Capacitor.Plugins;
       const result = await Preferences.get({ key: 'github_token' });
       GITHUB_TOKEN = result.value;
-      console.log('[GitHub] Got token from Capacitor:', GITHUB_TOKEN ? 'YES' : 'NO');
     } catch {}
   }
   
   if (!GITHUB_TOKEN) {
     GITHUB_TOKEN = localStorage.getItem('github_token');
-    console.log('[GitHub] Got token from localStorage:', GITHUB_TOKEN ? 'YES' : 'NO');
   }
   
   // Si no hay token en storage, intentar obtener de Pastebin
   if (!GITHUB_TOKEN) {
-    console.log('[GitHub] No token found, fetching from pastebin...');
     GITHUB_TOKEN = await fetchTokenFromPastebin(PASTEBIN_URL);
-    console.log('[GitHub] Pastebin fetch result:', GITHUB_TOKEN ? 'SUCCESS' : 'FAILED');
     
     // Guardar el token obtenido de pastebin para la próxima vez
     if (GITHUB_TOKEN) {
-      console.log('[GitHub] Saving token from pastebin to localStorage for future use');
       localStorage.setItem('github_token', GITHUB_TOKEN);
     }
   }
@@ -149,13 +138,11 @@ class GitHubBackendClient {
 
   async request(endpoint, options = {}) {
     const token = await this.getToken();
-    console.log('[GitHub] Token available:', token ? 'YES' : 'NO');
     if (!token) {
       throw new Error('Token de GitHub no configurado. Ve a Settings para configurar el token.');
     }
     
     const url = endpoint.startsWith('http') ? endpoint : `${this.baseUrl}${endpoint}`;
-    console.log('[GitHub] Request URL:', url);
     
     const response = await fetch(url, {
       ...options,
@@ -167,7 +154,6 @@ class GitHubBackendClient {
       }
     });
 
-    console.log('[GitHub] Response status:', response.status);
     if (!response.ok) {
       const error = await response.json();
       throw new Error(error.message || `HTTP ${response.status}`);
@@ -177,17 +163,14 @@ class GitHubBackendClient {
   }
 
   async getFile(path) {
-    console.log('[GitHub] getFile:', path);
     try {
       const data = await this.request(`/${path}`);
-      console.log('[GitHub] getFile response:', data);
       if (data.content) {
         const content = atob(data.content);
         return JSON.parse(content);
       }
       return null;
     } catch (err) {
-      console.error('[GitHub] getFile error:', err.message);
       if (err.message.includes('404')) return null;
       throw err;
     }
