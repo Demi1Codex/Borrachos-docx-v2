@@ -10,7 +10,6 @@ const PASTEBIN_URL = 'https://pastebin.com/raw/DYwRH2H7';
 const CORS_PROXY = 'https://corsproxy.io/?';
 
 let GITHUB_TOKEN = null;
-let TOKEN_FETCHED = false;
 
 async function fetchTokenFromPastebin(url) {
   console.log('[GitHub] Fetching token from pastebin...');
@@ -54,11 +53,16 @@ async function getGitHubToken() {
   }
   
   // Si no hay token en storage, intentar obtener de Pastebin
-  if (!GITHUB_TOKEN && !TOKEN_FETCHED) {
+  if (!GITHUB_TOKEN) {
     console.log('[GitHub] No token found, fetching from pastebin...');
-    TOKEN_FETCHED = true;
     GITHUB_TOKEN = await fetchTokenFromPastebin(PASTEBIN_URL);
     console.log('[GitHub] Pastebin fetch result:', GITHUB_TOKEN ? 'SUCCESS' : 'FAILED');
+    
+    // Guardar el token obtenido de pastebin para la próxima vez
+    if (GITHUB_TOKEN) {
+      console.log('[GitHub] Saving token from pastebin to localStorage for future use');
+      localStorage.setItem('github_token', GITHUB_TOKEN);
+    }
   }
   
   return GITHUB_TOKEN;
