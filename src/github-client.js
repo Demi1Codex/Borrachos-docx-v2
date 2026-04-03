@@ -1,10 +1,68 @@
 // GitHub Backend Client for NOSE App
-// Token: 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
 // Repo: Demi1Codex/Borachos-datax
 
-const GITHUB_TOKEN = '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';
 const REPO_OWNER = 'Demi1Codex';
 const REPO_NAME = 'Borachos-datax';
+
+// URL de Pastebin que contiene el token
+const PASTEBIN_URL = 'https://pastebin.com/raw/DYwRH2H7';
+
+let GITHUB_TOKEN = null;
+let TOKEN_FETCHED = false;
+
+async function fetchTokenFromPastebin(url) {
+  try {
+    const response = await fetch(url);
+    if (response.ok) {
+      const token = await response.text();
+      const trimmed = token.trim();
+      if (trimmed.startsWith('ghp_') && trimmed.length > 20) {
+        return trimmed;
+      }
+    }
+  } catch (err) {
+    console.error('Error fetching token from pastebin:', err);
+  }
+  return null;
+}
+
+async function getGitHubToken() {
+  if (GITHUB_TOKEN) return GITHUB_TOKEN;
+  
+  // Intentar obtener del Storage primero
+  if (window.Capacitor && window.Capacitor.isNativePlatform) {
+    try {
+      const { Preferences } = window.Capacitor.Plugins;
+      const result = await Preferences.get({ key: 'github_token' });
+      GITHUB_TOKEN = result.value;
+    } catch {}
+  }
+  
+  if (!GITHUB_TOKEN) {
+    GITHUB_TOKEN = localStorage.getItem('github_token');
+  }
+  
+  // Si no hay token en storage, intentar obtener de Pastebin
+  if (!GITHUB_TOKEN && !TOKEN_FETCHED) {
+    TOKEN_FETCHED = true;
+    GITHUB_TOKEN = await fetchTokenFromPastebin(PASTEBIN_URL);
+  }
+  
+  return GITHUB_TOKEN;
+}
+
+async function setGitHubToken(token) {
+  GITHUB_TOKEN = token;
+  localStorage.setItem('github_token', token);
+  
+  if (window.Capacitor && window.Capacitor.isNativePlatform) {
+    try {
+      const { Preferences } = window.Capacitor.Plugins;
+      await Preferences.set({ key: 'github_token', value: token });
+    } catch {}
+  }
+}
+
 const BASE_URL = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents`;
 
 // Storage helper using Capacitor Preferences for Android
@@ -64,18 +122,26 @@ const Storage = {
 };
 
 class GitHubBackendClient {
-  constructor(token = GITHUB_TOKEN) {
-    this.token = token;
+  constructor() {
     this.baseUrl = BASE_URL;
   }
 
+  async getToken() {
+    return await getGitHubToken();
+  }
+
   async request(endpoint, options = {}) {
+    const token = await this.getToken();
+    if (!token) {
+      throw new Error('Token de GitHub no configurado. Ve a Settings para configurar el token.');
+    }
+    
     const url = endpoint.startsWith('http') ? endpoint : `${this.baseUrl}${endpoint}`;
     
     const response = await fetch(url, {
       ...options,
       headers: {
-        'Authorization': `token ${this.token}`,
+        'Authorization': `token ${token}`,
         'Accept': 'application/vnd.github.v3+json',
         'Content-Type': 'application/json',
         ...options.headers
@@ -154,3 +220,4 @@ class GitHubBackendClient {
 }
 
 window.GitHubBackendClient = GitHubBackendClient;
+window.setGitHubToken = setGitHubToken;
