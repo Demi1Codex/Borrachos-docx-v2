@@ -39,14 +39,18 @@ class UserManager {
     const normalizedName = this.normalizeUsername(username);
     const index = await this.github.getUserIndex();
     
-    let finalName = normalizedName;
-    let counter = 0;
-    
-    while (index.users.some(u => u.username === finalName)) {
-      finalName = await this.resolveDuplicateName(normalizedName, counter + 1);
-      counter++;
+    // Verificar si el usuario ya existe
+    if (index.users.some(u => u.username === normalizedName)) {
+      return { success: false, error: 'El usuario ya existe' };
     }
-
+    
+    // Verificar también por displayName
+    if (index.users.some(u => u.displayName.toLowerCase() === username.toLowerCase())) {
+      return { success: false, error: 'El usuario ya existe' };
+    }
+    
+    const finalName = normalizedName;
+    
     const { hash, salt } = await this.hashPassword(password);
 
     const newUser = {
