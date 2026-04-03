@@ -65,6 +65,32 @@ function finishInit() {
   setupEventListeners();
   applySavedTheme();
   applySavedAccentColor();
+  
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden && currentUser) {
+      syncIdeas();
+    }
+  });
+  
+  window.addEventListener('online', () => {
+    if (currentUser) {
+      syncIdeas();
+    }
+  });
+}
+
+async function syncIdeas() {
+  if (!currentUser || !githubClient) return;
+  try {
+    const userData = await githubClient.getUserIdeas(currentUser);
+    if (userData && userData.ideas) {
+      ideas = userData.ideas;
+      renderIdeas();
+      showNotification('📥 Ideas sincronizadas');
+    }
+  } catch (err) {
+    console.log('Sync error:', err.message);
+  }
 }
 
 function showLogin() {
