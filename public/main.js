@@ -295,6 +295,14 @@ function setupEventListeners() {
       accentColorInput.click();
     });
   }
+
+  // Clipboard Style button
+  const clipboardStyleBtn = document.getElementById('clipboardStyleBtn');
+  if (clipboardStyleBtn) {
+    clipboardStyleBtn.addEventListener('click', () => {
+      openInClipboardStyle('');
+    });
+  }
   
   if (accentColorInput) {
     accentColorInput.addEventListener('input', (e) => {
@@ -812,6 +820,7 @@ function renderIdeas() {
       <div class="card-desc">${idea.description}</div>
       ${dateHtml}
       <div class="card-actions">
+        <button class="btn-icon clipboard-btn" title="Abrir en Clipboard Style">❇️</button>
         <button class="btn-icon status-btn" title="${statusClass === 'progress' ? 'Pausar' : 'Reanudar'}">${statusClass === 'progress' ? '⏸️' : '▶️'}</button>
         <button class="btn-icon edit-btn" title="Editar">✏️</button>
         <button class="btn-icon btn-delete delete-btn" title="Borrar">🗑️</button>
@@ -821,6 +830,7 @@ function renderIdeas() {
     card.querySelector('.edit-btn').onclick = () => openModal(idea);
     card.querySelector('.delete-btn').onclick = () => deleteIdea(idea.id);
     card.querySelector('.status-btn').onclick = () => toggleStatus(idea.id);
+    card.querySelector('.clipboard-btn').onclick = () => openInClipboardStyle(idea.name);
 
     if (statusClass === 'progress') {
       progressList.appendChild(card);
@@ -884,6 +894,15 @@ function showToast(message) {
     toast.style.opacity = '0';
     setTimeout(() => toast.remove(), 300);
   }, 3000);
+}
+
+function openInClipboardStyle(title) {
+  const baseUrl = "https://demi1codex.github.io/clipboard-style/";
+  const url = `${baseUrl}?folderName=${encodeURIComponent(title)}`;
+
+  showToast(`Abriendo "${title}" en Clipboard Style...`);
+
+  window.open(url, '_blank');
 }
 
 init();
