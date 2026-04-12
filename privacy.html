@@ -1,67 +1,266 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="dark">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Política de Privacidad - Borrachos.docx</title>
-    <link rel="stylesheet" href="/src/style.css">
-    <style>
-        .privacy-container {
-            max-width: 800px;
-            margin: 4rem auto;
-            padding: 2rem;
-            background: var(--surface-color);
-            border-radius: 16px;
-            border: 1px solid var(--border-color);
-            line-height: 1.8;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Política de Privacidad - Borrachos.docx</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="icon" type="image/png" href="palpueblo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
 
-        .privacy-container h2 {
-            margin-top: 2rem;
-            color: var(--accent-color);
-        }
+    .privacy-page {
+      flex: 1;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem;
+      width: 100%;
+    }
 
-        .back-btn {
-            display: inline-block;
-            margin-bottom: 2rem;
-            color: var(--accent-color);
-            text-decoration: none;
-            font-weight: 600;
-        }
-    </style>
-    <script>
-        const savedTheme = localStorage.getItem('theme') || 'dark';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-    </script>
+    .privacy-header {
+      margin-bottom: 2rem;
+    }
+
+    .privacy-content {
+      background: var(--surface-color);
+      border-radius: 16px;
+      padding: 2.5rem;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--card-shadow);
+    }
+
+    .privacy-content h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(to right, var(--accent-color), #06B6D4);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .privacy-content h2 {
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      font-size: 1.25rem;
+      color: var(--accent-color);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .privacy-content h2::before {
+      content: "";
+      width: 4px;
+      height: 1.2em;
+      background: var(--accent-color);
+      border-radius: 2px;
+    }
+
+    .privacy-content p {
+      margin-bottom: 1rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+
+    .privacy-content ul {
+      margin-bottom: 1rem;
+      padding-left: 1.5rem;
+      color: var(--text-secondary);
+    }
+
+    .privacy-content li {
+      margin-bottom: 0.5rem;
+      line-height: 1.6;
+    }
+
+    .update-date {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: var(--surface-color);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.2s;
+      margin-bottom: 2rem;
+    }
+
+    .back-btn:hover {
+      background: var(--accent-color);
+      color: #121212;
+      border-color: var(--accent-color);
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .feature-item {
+      background: var(--bg-color);
+      padding: 1rem;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      border: 1px solid var(--border-color);
+    }
+
+    .feature-item span:first-child {
+      font-size: 1.5rem;
+    }
+
+    .feature-item span:last-child {
+      font-weight: 500;
+    }
+
+    @media (max-width: 600px) {
+      .privacy-page {
+        padding: 1rem;
+      }
+
+      .privacy-content {
+        padding: 1.5rem;
+      }
+
+      .privacy-content h1 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+  <script>
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
 </head>
 
 <body>
-    <div class="privacy-container">
-        <a href="index.html" class="back-btn">← Volver al Tablero</a>
-        <h1>Política de Privacidad</h1>
-        <p>Última actualización: 20 de diciembre de 2025</p>
-
-        <h2>1. Información que recopilamos</h2>
-        <p>Borrachos.docx es una aplicación local. Toda la información que creas (ideas, categorías, fechas) se guarda
-            exclusivamente en el almacenamiento local de tu navegador (LocalStorage) o en la propia aplicación de
-            escritorio. No enviamos tus datos a servidores externos.</p>
-
-        <h2>2. Uso de la Información</h2>
-        <p>Tus ideas son tuyas. La aplicación utiliza los datos únicamente para mostrarlos en el tablero, el calendario
-            y permitirte exportar/importar archivos .lock.</p>
-
-        <h2>3. Cifrado</h2>
-        <p>Cuando utilizas la función "Compartir" con contraseña, utilizamos algoritmos de cifrado de grado industrial
-            (AES-GCM) para proteger tus datos antes de generar el archivo .lock.</p>
-
-        <h2>4. Cookies y Seguimiento</h2>
-        <p>No utilizamos cookies de seguimiento ni servicios de análisis de terceros.</p>
-
-        <h2>5. Cambios en esta política</h2>
-        <p>Esta política puede actualizarse en el futuro, pero el principio fundamental de que tus datos permanecen
-            locales no cambiará.</p>
+  <header>
+    <img src="palpueblo.png" alt="Logo" class="logo">
+    <h1>Borrachos.docx</h1>
+    <div class="controls">
+      <button id="themeToggle" class="theme-toggle" aria-label="Toggle Theme">☀️</button>
     </div>
+  </header>
+
+  <main class="privacy-page">
+    <a href="index.html" class="back-btn">← Volver al Tablero</a>
+
+    <div class="privacy-content">
+      <div class="privacy-header">
+        <h1>Política de Privacidad</h1>
+        <p class="update-date">Última actualización: 12 de abril de 2026</p>
+      </div>
+
+      <h2>¿Qué es Borrachos.docx?</h2>
+      <p>Borrachos.docx es un gestor de ideas personal y tablero Kanban diseñado para organizar tus pensamientos, proyectos y tareas. Con él puedes:</p>
+
+      <div class="feature-grid">
+        <div class="feature-item">
+          <span>💡</span>
+          <span>Crear Ideas</span>
+        </div>
+        <div class="feature-item">
+          <span>📅</span>
+          <span>Calendario</span>
+        </div>
+        <div class="feature-item">
+          <span>📤</span>
+          <span>Compartir</span>
+        </div>
+        <div class="feature-item">
+          <span>🔔</span>
+          <span>Notificaciones</span>
+        </div>
+        <div class="feature-item">
+          <span>🎨</span>
+          <span>Temas</span>
+        </div>
+        <div class="feature-item">
+          <span>📁</span>
+          <span>Exportar .lock</span>
+        </div>
+      </div>
+
+      <h2>1. Tus datos son tuyos</h2>
+      <p>Borrachos.docx funciona <strong>100% en local</strong>. Toda la información que creas (ideas, categorías, fechas, imágenes) se guarda exclusivamente en:</p>
+      <ul>
+        <li><strong>LocalStorage</strong> de tu navegador</li>
+        <li><strong>Archivos .lock</strong> en tu dispositivo</li>
+      </ul>
+      <p><strong>No enviamos tus datos a ningún servidor externo.</strong> Tu información permanece en tu dispositivo en todo momento.</p>
+
+      <h2>2. Cifrado de datos</h2>
+      <p>Cuando utilizas la función "Compartir" con contraseña, protegemos tus datos usando <strong>cifrado AES-GCM de 256 bits</strong> (estándar militar) antes de generar el archivo .lock. Solo quien tenga la contraseña podrá descifrar la información.</p>
+
+      <h2>3. Cookies y seguimiento</h2>
+      <p><strong>No utilizamos:</strong></p>
+      <ul>
+        <li>Cookies de seguimiento</li>
+        <li>Servicios de análisis (Google Analytics, etc.)</li>
+        <li>Rastreadores de terceros</li>
+        <li>Publicidad</li>
+      </ul>
+
+      <h2>4. Permisos del navegador</h2>
+      <p>Solicitamos estos permisos solo cuando los necesitas:</p>
+      <ul>
+        <li><strong>Notificaciones:</strong> Para recordarte tus ideas y fechas importantes</li>
+        <li><strong>Almacenamiento:</strong> Para guardar tus datos localmente</li>
+      </ul>
+
+      <h2>5. Cambio de esta política</h2>
+      <p>Esta política puede actualizarse en el futuro. El principio fundamental de que <strong>tus datos permanecen locales y privados</strong> no cambiará nunca.</p>
+
+      <h2>6. Contacto</h2>
+      <p>Si tienes preguntas sobre esta política o la aplicación, no dudes en contactarnos.</p>
+    </div>
+  </main>
+
+  <footer style="text-align: center; padding: 2rem; color: var(--text-secondary); font-size: 0.8rem;">
+    <p>© 2025 Borrachos.docx | <a href="privacy.html" style="color: var(--accent-color); text-decoration: underline;">Política de Privacidad</a></p>
+  </footer>
+
+  <script>
+    const themeToggle = document.getElementById('themeToggle');
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+
+    function updateThemeIcon() {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      themeToggle.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
+    }
+
+    updateThemeIcon();
+
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateThemeIcon();
+    });
+  </script>
 </body>
 
 </html>
