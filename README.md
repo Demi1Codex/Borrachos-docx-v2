@@ -35,9 +35,10 @@ Borrachos.docx es una aplicación web para organizar ideas, proyectos y tareas e
 - Diseño responsive para móvil y escritorio
 
 ### 💾 Privacidad Total
-- **100% local:** tus datos nunca salen de tu dispositivo
+- **Sin cuenta:** 100% local, tus datos nunca salen de tu dispositivo
+- **Con cuenta:** Sincronización opcional con tu repositorio GitHub privado
 - Usa **LocalStorage** del navegador
-- Sin cookies, sin trackers, sin análisis
+- Sin cookies de seguimiento, sin análisis de terceros
 
 ---
 
@@ -119,7 +120,11 @@ Complexion/
 
 ## 🔒 Privacidad
 
-**Borrachos.docx no envía tus datos a ningún servidor.** Toda la información se almacena exclusivamente en tu navegador (LocalStorage) o en archivos locales `.lock`. Puedes verificar esto inspeccionando las solicitudes de red en tu navegador.
+**Sin cuenta:** Todas tus ideas se almacenan exclusivamente en tu navegador (LocalStorage). No enviamos nada a servidores.
+
+**Con cuenta:** Tus ideas se sincronizan con tu cuenta de GitHub para acceso multiplataforma. Tu usuario y contraseña se guardan localmente para auto-login.
+
+**Archivos .lock:** Puedes exportar ideas como archivos cifrados locales en cualquier momento.
 
 Consulta la [Política de Privacidad](privacy.html) para más detalles.
 
